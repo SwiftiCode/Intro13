@@ -37,15 +37,15 @@ class RatingControl: UIView {
             let starButton = UIButton()
             
             // Set the image for each starButton state
-            starButton.setImage(emptyStarPic, forState: .Normal)
-            starButton.setImage(filledStarPic, forState: .Selected)
-            starButton.setImage(filledStarPic, forState: [.Highlighted, .Selected])
+            starButton.setImage(emptyStarPic, for: UIControlState())
+            starButton.setImage(filledStarPic, for: .selected)
+            starButton.setImage(filledStarPic, for: [.highlighted, .selected])
             
             // Set adjust image when highlighted to false. Apple Note: If true, the image is drawn lighter when the button is highlighted. The default value is true.
             starButton.adjustsImageWhenHighlighted = false
  
             // Link IBAction to each starbutton
-            starButton.addTarget(self, action: #selector(RatingControl.starTapped(_:)), forControlEvents: .TouchDown)
+            starButton.addTarget(self, action: #selector(RatingControl.starTapped(_:)), for: .touchDown)
             
             // Add starbutton to the UIbutton array
             starCollection += [starButton]
@@ -57,7 +57,7 @@ class RatingControl: UIView {
     }
  
     // We need to override this function so that we can set the size of 5 buttons
-    override func intrinsicContentSize() -> CGSize {
+    override var intrinsicContentSize : CGSize {
         
         let starSize = Int(frame.size.height)
         let totalWidth = totalStars * (starSize + spacing)
@@ -74,7 +74,7 @@ class RatingControl: UIView {
         var starFrame = CGRect(x: 0, y: 0, width: starSize, height: starSize)
         
         // For each star in starCollection, we calculate the original x position of ech star. First star should be 0 and second star should be the size of the star plus spacing and multiple by 1 and so on...
-        for (index, star) in starCollection.enumerate() {
+        for (index, star) in starCollection.enumerated() {
 
             // Calculate original x position for each star
             starFrame.origin.x = CGFloat(index * (starSize + spacing))
@@ -89,9 +89,9 @@ class RatingControl: UIView {
     
     
     // MARK: Action
-    @IBAction func starTapped(star:UIButton) {
+    @IBAction func starTapped(_ star:UIButton) {
         
-        ratings = starCollection.indexOf(star)! + 1
+        ratings = starCollection.index(of: star)! + 1
         
         //print(ratings)
         
@@ -101,9 +101,9 @@ class RatingControl: UIView {
     
     func updateStarState()  {
         
-        for (index, star) in starCollection.enumerate() {
+        for (index, star) in starCollection.enumerated() {
             
-            star.selected = index < ratings
+            star.isSelected = index < ratings
         }
     }
 }
